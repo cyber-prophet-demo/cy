@@ -30,13 +30,13 @@ export-env {
     let-env cy = if ($path1 | path exists ) {
         open ($path1)
     } else {
-        echo 'cy_config.json is not found. Run "cy create config json"'
+        echo 'cy_config.json is not found. Run "cy config create json file"'
         ''
     }
 }
 
-# Create config JSON to set env varables, to use as parameters
-export def-env "create config json" [] {
+# config create json file to set env varables, to use as parameters
+export def-env "config create json file" [] {
 
     let home = ($env.HOME + '/cy/')
     # let old = (open ($home + 'config.json'))
@@ -94,7 +94,7 @@ export def-env "create config json" [] {
 #################################################
 
 # Create text particle and pin it to local node
-export def 'create and pin text particle' [
+export def 'particle create text' [
     text?: string
 ] {
 
@@ -107,7 +107,7 @@ export def 'create and pin text particle' [
 
 
 # Add 2 texts cyberlink
-export def 'add two texts cyberlink' [
+export def 'cyberlink add two texts' [
     text_from
     text_to
     --dont_append_to_cyberlinks_temp_csv (-d)
@@ -123,13 +123,13 @@ export def 'add two texts cyberlink' [
     if $dont_append_to_cyberlinks_temp_csv {
         $out_table
     } else {
-        $out_table | append cyberlinks to temp table
+        $out_table | cyberlinks append to temp table
     }
 }
 
 
 # Append cyberlinks from pipe or parameters to temp table
-export def 'append cyberlinks to temp table' [
+export def 'cyberlinks append to temp table' [
     cyberlinks?    #cyberlinks table
     --dont_show_out_table
 ] {
@@ -184,13 +184,13 @@ export def 'add files from folder to ipfs' [
     if $dont_append_to_cyberlinks_temp_csv {
         $out_table
     } else {
-        $out_table | append cyberlinks to temp table
+        $out_table | cyberlinks append to temp table
     }
 
 }
 
 # Add random quote cyberlink to temp table
-export def 'add quote forismatic cyberlink' [] {
+export def 'cyberlink add quote forismatic' [] {
     let q1 = (
         fetch -r https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json |
         str replace "\\\\" "" | 
@@ -205,11 +205,11 @@ export def 'add quote forismatic cyberlink' [] {
         }
     )
 
-    add two texts cyberlink $quoteAuthor $q1.quoteText
+    cyberlink add two texts $quoteAuthor $q1.quoteText
 }
 
-# Add chuck norris cyberlink to temp table
-export def 'add chuck norris cyberlink' [
+# Add Chuck Norris cyberlink to temp table
+export def 'cyberlink add quote chuck norris' [
     --dont_append_to_cyberlinks_temp_csv (-d)
 ] {
     let cid_from = (create text particle 'chuck norris')
@@ -225,13 +225,13 @@ export def 'add chuck norris cyberlink' [
     )
 
     if $dont_append_to_cyberlinks_temp_csv {$_table} else {
-        $_table | append cyberlinks to temp table
+        $_table | cyberlinks append to temp table
     }
 } 
 
 
 # Add text particle into 'from' column of local_cyberlinks table
-export def 'add text particle into from column' [
+export def 'particle add text into from column' [
     text: string                    # Text to upload to ipfs
 ] {
     $in | 
@@ -240,7 +240,7 @@ export def 'add text particle into from column' [
 }
 
 # Add text particle into 'to' column of local_cyberlinks table
-export def 'add text particle into to column' [
+export def 'particle add text into to column' [
     text: string                    # Text to upload to ipfs
 ] { 
     $in | 
@@ -280,6 +280,7 @@ export def 'clear temp cyberlinks table' [] {
 }
 
 #################################################
+# Pure table functions
 
 # Paste table from clipboard
 export def 'paste table from clipboard' [] {
