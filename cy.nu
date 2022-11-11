@@ -93,7 +93,7 @@ export def-env "config create json file" [] {
 
 #################################################
 
-# Create text particle and pin it to local node
+# particle create text and pin it to local node
 export def 'particle create text' [
     text?: string
 ] {
@@ -112,8 +112,8 @@ export def 'cyberlink add two texts' [
     text_to
     --dont_append_to_cyberlinks_temp_csv (-d)
 ] {
-    let cid_from = (create text particle $text_from)
-    let cid_to = (create text particle $text_to)
+    let cid_from = (particle create text $text_from)
+    let cid_to = (particle create text $text_to)
     
     let $out_table = (
         [[from to 'from_text' 'to_text'];
@@ -172,7 +172,7 @@ export def 'add files from folder to ipfs' [
         if $cyberlink_filenames_to_their_files {
             $cid_table.filename | 
                 each {
-                    |it| create text particle $it 
+                    |it| particle create text $it 
                 } | 
                 wrap from | 
                 merge {$cid_table}
@@ -212,12 +212,12 @@ export def 'cyberlink add quote forismatic' [] {
 export def 'cyberlink add quote chuck norris' [
     --dont_append_to_cyberlinks_temp_csv (-d)
 ] {
-    let cid_from = (create text particle 'chuck norris')
+    let cid_from = (particle create text 'chuck norris')
     
     let quote = (fetch https://api.chucknorris.io/jokes/random).value 
     # echo $quote
 
-    let cid_to = (create text particle $quote)
+    let cid_to = (particle create text $quote)
     
     let $_table = (
         [[from to 'from_text' 'to_text'];
@@ -235,7 +235,7 @@ export def 'particle add text into from column' [
     text: string                    # Text to upload to ipfs
 ] {
     $in | 
-        upsert from (create text particle $text) |
+        upsert from (particle create text $text) |
         select from to
 }
 
@@ -245,7 +245,7 @@ export def 'particle add text into to column' [
 ] { 
     $in | 
         rename -c ['to' 'from'] | 
-        upsert to (create text particle $text) |
+        upsert to (particle create text $text) |
         select from to
 }
 
@@ -262,7 +262,7 @@ export def 'upload text values from column to ipfs' [
         upsert $column_to_write_cid {
             |it| $it |
                 get $column_with_text |
-                create text particle 
+                particle create text 
         }
 }
 
